@@ -4,11 +4,14 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/scaredcat"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/scaredcat_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.13">
+        <activity
+            android:name=".dashboard"
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
