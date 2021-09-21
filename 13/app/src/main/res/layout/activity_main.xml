@@ -23,17 +23,43 @@
 
     <Button
 
-        android:id="@+id/dashboardbtn"
+        android:id="@+id/loginbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/circlebutton"
         android:backgroundTint="@color/teal_700"
-        android:text="Dashboard"
+        android:text="Login"
         app:layout_constraintBottom_toTopOf="@+id/instant_location_share"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.85"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.617" />
+
+    <Switch
+        android:id="@+id/test_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="loggedin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.266"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.197" />
+
+    <Button
+        android:id="@+id/chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="chat"
+        android:background="@drawable/circlebutton"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.783"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/instant_location_share"
+        app:layout_constraintVertical_bias="0.322" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

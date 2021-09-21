@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/advent_pro</item>
+        <item>@font/annie_use_your_telescope</item>
+        <item>@font/just_another_hand</item>
+        <item>@font/mouse_memoirs</item>
+        <item>@font/zeyada</item>
+    </array>
+</resources>
