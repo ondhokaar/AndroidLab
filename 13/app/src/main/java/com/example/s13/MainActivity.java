@@ -11,9 +11,11 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity extends AppCompatActivity {
 
-    private static Button loginbtn, chatbtn;
+    private static Button loginbtn, chatbtn, outbtn;
 
 
     private static Switch test_login;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //findview
+        outbtn = (Button) findViewById(R.id.signout);
         loginbtn = (Button) findViewById(R.id.loginbtn);
         test_login = (Switch) findViewById(R.id.test_login);
         chatbtn = (Button) findViewById(R.id.chat);
@@ -43,11 +46,19 @@ public class MainActivity extends AppCompatActivity {
 
         }
         else {
+            outbtn.setVisibility(View.GONE);
             chatbtn.setVisibility(View.GONE);
         }
 
-
+        test_login.setVisibility(View.GONE);
         //setonclick
+        outbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                test_login.setChecked(false);
+            }
+        });
         chatbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,10 +80,12 @@ public class MainActivity extends AppCompatActivity {
                 if(test_login.isChecked()) {
                     loginbtn.setVisibility(View.GONE);
                     chatbtn.setVisibility(View.VISIBLE);
+                    outbtn.setVisibility(View.VISIBLE);
                 }
                 else {
                     loginbtn.setVisibility(View.VISIBLE);
                     chatbtn.setVisibility(View.GONE);
+                    outbtn.setVisibility(View.GONE);
                 }
 
             }

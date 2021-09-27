@@ -22,7 +22,15 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class loginactivity extends AppCompatActivity {
@@ -133,8 +141,29 @@ public class loginactivity extends AppCompatActivity {
                     if(task.isSuccessful()) {
                         Log.d("verification: ", "user logged in");
                         //userisloggedin();
-                        Toast.makeText(getApplicationContext(), "login succ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "login successful", Toast.LENGTH_SHORT).show();
+
                         FirebaseUser user = task.getResult().getUser();
+                        //now add this user to the database:
+                        final DatabaseReference mUserDB = FirebaseDatabase.getInstance().getReference().child("user").child(user.getUid());
+                        mUserDB.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                //if user doesn't exists:
+                                if(!snapshot.exists()) {
+                                    Map<String, Object> userMap = new HashMap<>();
+                                    userMap.put("phone", user.getPhoneNumber());
+                                    userMap.put("username", user.getUid());
+                                    mUserDB.updateChildren(userMap);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
                         MainActivity.setLoginbtn(View.GONE);
                         MainActivity.setChatbtn(View.VISIBLE);
                         MainActivity.setToggle(true);
@@ -143,7 +172,7 @@ public class loginactivity extends AppCompatActivity {
                     }
                     else {
                         Log.d("verification: ", "failed");
-                        sendcode.setText("sorry");
+                        sendcode.setText("sorry, try again");
                     }
 
                 }
@@ -157,9 +186,13 @@ public class loginactivity extends AppCompatActivity {
             finish();
             return;
         }
+
     }
     private void verify_phone_with_code() {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(vid, code.getText().toString());
         signin_phoneauth(credential);
     }
+
+    //
+
 }
