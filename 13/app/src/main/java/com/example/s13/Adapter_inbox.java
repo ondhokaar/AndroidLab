@@ -3,6 +3,8 @@ package com.example.s13;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +24,19 @@ import java.util.ArrayList;
 public class Adapter_inbox extends RecyclerView.Adapter<Adapter_inbox.ViewHolder>{
     private ArrayList<messageObj> msg_list = new ArrayList<>();
     private Context context;
-
+    private int redcolor = 0;
+    private int bluecolor = 0;
+    void adjustColor(String sender, String user) {
+        if(sender == user) {
+            //redcolor = 255;
+            //bluecolor = 0;
+            Log.d("color", "setting red");
+        }
+        else {
+           // redcolor = 0;
+            //bluecolor = 255;
+        }
+    }
     public Adapter_inbox(Context context) {
         this.context = context;
     }
@@ -43,6 +57,16 @@ public class Adapter_inbox extends RecyclerView.Adapter<Adapter_inbox.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.senderID.setText(msg_list.get(position).getSenderID());
         holder.msg.setText(msg_list.get(position).getMsg());
+
+        if(msg_list.get(position).getSenderID() == FirebaseAuth.getInstance().getUid()) {
+            holder.senderID.setTextColor(Color.argb(100, redcolor, 255, 255));
+            holder.msg.setTextColor(Color.argb(100, redcolor, 255, 255));
+        }
+        else {
+            holder.senderID.setTextColor(Color.argb(100, 255, 255, 255));
+
+            holder.msg.setTextColor(Color.argb(100, 255, 255, 255));
+        }
 //        holder.senderID.setText("sender: ");
 //        holder.msg.setText("msg msg msg onek msg");
         holder.parent.setOnClickListener(new View.OnClickListener() {

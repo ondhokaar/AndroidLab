@@ -34,7 +34,6 @@ public class Inbox extends AppCompatActivity {
     private EditText writemsg;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +53,7 @@ public class Inbox extends AppCompatActivity {
         message_adapter.setArrayList(message_list);
 
         inbox_rv.setAdapter(message_adapter);
+
         inbox_rv.setLayoutManager(new LinearLayoutManager(this));
 
         sendbtn.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +84,8 @@ public class Inbox extends AppCompatActivity {
 
                     messageObj newmsg = new messageObj(text, snapshot.getKey(), sender);
                     message_list.add(newmsg);
+                    message_adapter.adjustColor(sender, FirebaseAuth.getInstance().getUid().toString());
+                    inbox_rv.getLayoutManager().scrollToPosition(message_list.size() - 1);
                     message_adapter.notifyDataSetChanged();
 
                 }
@@ -118,6 +120,7 @@ public class Inbox extends AppCompatActivity {
         msgMap.put("sender", (FirebaseAuth.getInstance().getUid()));
 
         dbref.updateChildren(msgMap);
+        writemsg.getText().clear();
 
     }
 }
