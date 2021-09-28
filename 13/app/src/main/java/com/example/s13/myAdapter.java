@@ -14,6 +14,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.lang.reflect.Array;
 import java.security.PrivateKey;
 import java.util.ArrayList;
@@ -46,16 +49,22 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder>{
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "calling " + contactList.get(position).getName(), Toast.LENGTH_SHORT).show();
-                Uri uri = Uri.parse("tel:" + contactList.get(position).getPhone());
-                Intent intent = new Intent(Intent.ACTION_DIAL, uri);
+                String key = FirebaseDatabase.getInstance().getReference().push().getKey();
+                FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("chat").setValue(true);
+                FirebaseDatabase.getInstance().getReference().child("user").child(contactList.get(position).getUid()).child("chat").setValue(true);
 
-                try {
-                    context.startActivity(intent);
-                } catch (Exception e) {
-                    Log.d("myAdapter impl: ", "cant open dialer");
 
-                }
+                //================================
+//                Toast.makeText(context, "calling " + contactList.get(position).getName(), Toast.LENGTH_SHORT).show();
+//                Uri uri = Uri.parse("tel:" + contactList.get(position).getPhone());
+//                Intent intent = new Intent(Intent.ACTION_DIAL, uri);
+//
+//                try {
+//                    context.startActivity(intent);
+//                } catch (Exception e) {
+//                    Log.d("myAdapter impl: ", "cant open dialer");
+//
+//                }
             }
         });
 

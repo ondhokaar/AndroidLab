@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,7 +25,9 @@ import java.util.ArrayList;
 public class chatactivity extends AppCompatActivity {
     private RecyclerView contactRV;
     private ArrayList<userObj> contactArraylist;
+
     private myAdapter adapter;
+    FirebaseUser loggedInUser = FirebaseAuth.getInstance().getCurrentUser();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,30 +40,63 @@ public class chatactivity extends AppCompatActivity {
         adapter.setContactList(contactArraylist);
 
         contactRV.setAdapter(adapter);
+        Log.d("snap init", "setting adapter");
         contactRV.setLayoutManager(new LinearLayoutManager(this));
-
+        Log.d("snap init", "now i'll getContacts");
         getContacts();
+        Log.d("snap init", "getting contacts done");
 
 
     }
     private void chk_isUser(userObj mycontact) {
+        Log.d("snap chk_isUser: ", "start checking");
         DatabaseReference mUserDB = FirebaseDatabase.getInstance().getReference().child("user");
         if(!mycontact.getPhone().contains("+88")) {
             mycontact.setPhone("+88" + mycontact.getPhone());
         }
+        if(mycontact.getPhone().contains("-")) {
+            mycontact.setPhone(mycontact.getPhone().replace("-", ""));
+        }
+        if(mycontact.getPhone().contains(" ")) {
+            mycontact.setPhone(mycontact.getPhone().replace(" ", ""));
+        }
         Query query = mUserDB.orderByChild("phone").equalTo(mycontact.getPhone());
+
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for(DataSnapshot childSnap : snapshot.getChildren()) {
+                    Log.d("snapshots ", childSnap.child("phone").getValue().toString() + " -> local : " + mycontact.getPhone());
+
+                    Log.d("snapshots: ", String.valueOf(snapshot.exists()));
+
+                    Log.d("snap if me: ", childSnap.child("phone").getValue().toString() + " and me : " + loggedInUser.getPhoneNumber());
+
+                    if(childSnap.child("phone").getValue().toString().equals(loggedInUser.getPhoneNumber())) {
+                        mycontact.setMe(true);
+                    }
+
+
+                }
                 if(snapshot.exists()) {
-                    Log.d("chk_isUser", "true");
+
+                    Log.d("snapshots chk_isUser", "true");
+
                     mycontact.setUser(true);
+                    mycontact.setUid(snapshot.getKey());
+                    //Log.d("snap chk if me", snapshot.child("phone").getValue().toString() + " and me : " );//+ loggedInUser.getPhoneNumber());
+                    if(!mycontact.isMe()) {
+                        contactArraylist.add(mycontact);
+                        adapter.notifyDataSetChanged();
+                    }
+
                 }
-                else {
-                   // Log.d("chk_isUser", "") pending work
-                    mycontact.setUser(false);
-                }
+//                else {
+//                    Log.d("chk_isUser", "false");
+//                    mycontact.setUser(false);
+//                }
 
             }
 
@@ -73,24 +110,22 @@ public class chatactivity extends AppCompatActivity {
     }
 
     public void getContacts() {
+        Log.d("snap getCon", "starting to get contacts");
         Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-
+        Log.d("snap getCon", "cursor set");
         while(phones.moveToNext()) {
+            Log.d("snap getCon", "inside while move next");
             @SuppressLint("Range") String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             @SuppressLint("Range") String phone = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
 
-            userObj contact = new userObj(name, phone);
-            Log.d("user issue", "now checking user");
+            userObj contact = new userObj("", name, phone);
+            Log.d("snap user issue", "now checking user");
             chk_isUser(contact);
-            Log.d("user issue", "chk done, " + contact.getPhone() + " user = " + contact.getUser());
+            Log.d("snap user issue", "chk done, " + contact.getPhone() + " user = " + contact.getUser());
 
 
-            if(contact.getUser() == true) {
-                contactArraylist.add(contact);
-                Log.d("user issue", "adding to arraylist done");
-            }
-
+            //public void onDataChange() was taking action after getContacts done, check chk_isUser() just above this method
 
 
 
