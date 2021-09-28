@@ -13,16 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.13">
         <activity
-            android:name=".all_Inbox"
+            android:name=".Inbox"
+            android:exported="true" />
+        <activity
+            android:name=".ActiveInboxes"
             android:exported="true" />
         <activity
             android:name=".chatactivity"
             android:exported="true" />
         <activity
             android:name=".loginactivity"
-            android:exported="true" />
-        <activity
-            android:name=".chat_inbox"
             android:exported="true" />
         <activity
             android:name=".MainActivity"

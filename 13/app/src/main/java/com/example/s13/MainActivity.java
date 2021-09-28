@@ -62,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
         chatbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), chatactivity.class));
+                //startActivity(new Intent(getApplicationContext(), chatactivity.class));
+                startActivity(new Intent(getApplicationContext(), ActiveInboxes.class));
             }
         });
         loginbtn.setOnClickListener(new View.OnClickListener() {

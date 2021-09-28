@@ -1,15 +1,13 @@
 package com.example.s13;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,8 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.lang.reflect.Array;
-import java.security.PrivateKey;
 import java.util.ArrayList;
 
 public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder>{
@@ -42,7 +38,7 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.name.setText(contactList.get(position).getName());
         holder.phone.setText(contactList.get(position).getPhone());
 
@@ -50,8 +46,9 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder>{
             @Override
             public void onClick(View view) {
                 String key = FirebaseDatabase.getInstance().getReference().push().getKey();
-                FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("chat").setValue(true);
-                FirebaseDatabase.getInstance().getReference().child("user").child(contactList.get(position).getUid()).child("chat").setValue(true);
+                FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("chat").child(key).setValue(true);
+                FirebaseDatabase.getInstance().getReference().child("user").child(contactList.get(position).getUid()).child("chat").child(key).setValue(true);
+                Log.d("chat ", contactList.get(position).getUid());
 
 
                 //================================
@@ -83,7 +80,7 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder>{
             super(itemView);
             name = itemView.findViewById(R.id.name);
             phone = itemView.findViewById(R.id.phone);
-            parent = itemView.findViewById(R.id.parent);
+            parent = itemView.findViewById(R.id.userList_parent);
         }
     }
 }

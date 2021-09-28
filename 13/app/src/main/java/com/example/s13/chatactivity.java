@@ -73,7 +73,8 @@ public class chatactivity extends AppCompatActivity {
                     Log.d("snapshots: ", String.valueOf(snapshot.exists()));
 
                     Log.d("snap if me: ", childSnap.child("phone").getValue().toString() + " and me : " + loggedInUser.getPhoneNumber());
-
+                    mycontact.setUid(childSnap.getKey());
+                    Log.d("uid", childSnap.getKey());
                     if(childSnap.child("phone").getValue().toString().equals(loggedInUser.getPhoneNumber())) {
                         mycontact.setMe(true);
                     }
@@ -85,7 +86,8 @@ public class chatactivity extends AppCompatActivity {
                     Log.d("snapshots chk_isUser", "true");
 
                     mycontact.setUser(true);
-                    mycontact.setUid(snapshot.getKey());
+                    Log.d("uid ", snapshot.getKey());
+                    //mycontact.setUid(snapshot.getKey());
                     //Log.d("snap chk if me", snapshot.child("phone").getValue().toString() + " and me : " );//+ loggedInUser.getPhoneNumber());
                     if(!mycontact.isMe()) {
                         contactArraylist.add(mycontact);

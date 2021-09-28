@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/userList_parent"
+    android:id="@+id/activeChats_parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
@@ -12,7 +12,7 @@
 
     <TextView
 
-        android:id="@+id/name"
+        android:id="@+id/chatID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/annie_use_your_telescope"
@@ -23,18 +23,5 @@
         android:textColor="#FFFFFF"
         android:textSize="23dp"
         android:textStyle="normal" />
-
-    <TextView
-        android:id="@+id/phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/name"
-        android:fontFamily="@font/annie_use_your_telescope"
-        android:paddingLeft="10dp"
-        android:paddingTop="3dp"
-        android:text="+880175000000"
-        android:textColor="#D1CDCD"
-        android:textSize="16dp"
-        android:textStyle="italic" />
 
 </RelativeLayout>
