@@ -36,8 +36,7 @@ public class ActiveInboxes extends AppCompatActivity {
         active_chats_rv = (RecyclerView) findViewById(R.id.active_chat_rv);
         activeChats_list = new ArrayList<>();
 
-        activeChats_list.add(new chatObj("new chat id"));
-        activeChats_list.add(new chatObj("new chat id"));
+
 
         activeChats_adapter = new Adapter_activeChats(this);
         activeChats_adapter.setArrayList(activeChats_list);
@@ -56,15 +55,21 @@ public class ActiveInboxes extends AppCompatActivity {
         });
 
         getActiveChats();
+        Log.d("prom", "what");
+        int j = 0;
+        for(chatObj i : activeChats_list) {
+            Log.d("active dup", String.valueOf(j) + i.getChatID());
+        }
     }
 
 
     private void getActiveChats() {
         DatabaseReference mUserChatDB = FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("chat");
-
+        activeChats_list.clear();
         mUserChatDB.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                activeChats_list.clear();
                 if(snapshot.exists()) {
                     for(DataSnapshot childSnaps : snapshot.getChildren()) {
 

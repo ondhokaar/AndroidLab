@@ -2,6 +2,8 @@ package com.example.s13;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -50,16 +53,52 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder>{
             @Override
             public void onClick(View view) {
                 //first chck if already exists chat with this person, if so then open existing chat else creat new chat and open that
-                String key = FirebaseDatabase.getInstance().getReference().push().getKey();
-                FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("chat").child(key).setValue(contactList.get(position).getName());
-                DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("username");
-                //FirebaseDatabase.getInstance().getReference().child("user").child(contactList.get(position).getUid()).child("chat").child(key).setValue(FirebaseDatabase.getInstance().getReference().child("user").);
+                Log.d("dup --- clicked on:", holder.name.getText().toString());
 
-                dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("chat");
+                Query query = ref.equalTo(holder.name.getText().toString());
+
+                query.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        Log.d("active chats: ", snapshot.getValue().toString());
-                        FirebaseDatabase.getInstance().getReference().child("user").child(contactList.get(position).getUid()).child("chat").child(key).setValue(snapshot.getValue().toString());
+                        Log.d("dup found? in your list -> ",String.valueOf(snapshot.exists()));
+                        if(snapshot.exists()){
+                            for (DataSnapshot chats : snapshot.getChildren()) {
+                                Log.d("dup printing snaps: ", chats.getValue().toString() + " : " + holder.name.getText().toString());
+                                if (chats.getValue().toString().equals(holder.name.getText().toString())) {
+
+                                    Intent inbox_intent = new Intent(view.getContext(), Inbox.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("chatID", chats.getKey());
+                                    inbox_intent.putExtras(bundle);
+                                    view.getContext().startActivity(inbox_intent);
+
+                                    break;
+
+                                }
+                            }
+
+                        }
+                        else {
+                            Log.d("dup ", "no dup found, so creating new chat");
+                            String key = FirebaseDatabase.getInstance().getReference().push().getKey();
+                            FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("chat").child(key).setValue(contactList.get(position).getName());
+                            DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("username");
+                            // FirebaseDatabase.getInstance().getReference().child("user").child(contactList.get(position).getUid()).child("chat").child(key).setValue("test");
+
+                            dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    Log.d("active chats: ", snapshot.getValue().toString());
+                                    FirebaseDatabase.getInstance().getReference().child("user").child(contactList.get(position).getUid()).child("chat").child(key).setValue(snapshot.getValue().toString());
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                        }
                     }
 
                     @Override
@@ -67,6 +106,8 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder>{
 
                     }
                 });
+
+
 
                 Log.d("chat ", contactList.get(position).getUid());
 
@@ -82,6 +123,8 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder>{
 //                    Log.d("myAdapter impl: ", "cant open dialer");
 //
 //                }
+
+
             }
         });
 
