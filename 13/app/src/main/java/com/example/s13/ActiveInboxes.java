@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -66,7 +67,8 @@ public class ActiveInboxes extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()) {
                     for(DataSnapshot childSnaps : snapshot.getChildren()) {
-                        chatObj mChat = new chatObj(childSnaps.getKey());
+
+                        chatObj mChat = new chatObj(childSnaps.getValue().toString());
                         activeChats_list.add(mChat);
                         activeChats_adapter.notifyDataSetChanged();
                     }

@@ -13,7 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -45,9 +49,25 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder>{
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //first chck if already exists chat with this person, if so then open existing chat else creat new chat and open that
                 String key = FirebaseDatabase.getInstance().getReference().push().getKey();
-                FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("chat").child(key).setValue(true);
-                FirebaseDatabase.getInstance().getReference().child("user").child(contactList.get(position).getUid()).child("chat").child(key).setValue(true);
+                FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("chat").child(key).setValue(contactList.get(position).getName());
+                DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("username");
+                //FirebaseDatabase.getInstance().getReference().child("user").child(contactList.get(position).getUid()).child("chat").child(key).setValue(FirebaseDatabase.getInstance().getReference().child("user").);
+
+                dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Log.d("active chats: ", snapshot.getValue().toString());
+                        FirebaseDatabase.getInstance().getReference().child("user").child(contactList.get(position).getUid()).child("chat").child(key).setValue(snapshot.getValue().toString());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
                 Log.d("chat ", contactList.get(position).getUid());
 
 

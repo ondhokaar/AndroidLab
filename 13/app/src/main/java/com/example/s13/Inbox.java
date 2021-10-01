@@ -19,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -112,15 +113,44 @@ public class Inbox extends AppCompatActivity {
             }
         });
     }
+
     private void sendmsg() {
-        DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("chat").child(chatID).push();
+        DatabaseReference dbref_newText = FirebaseDatabase.getInstance().getReference().child("chat").child(chatID).push();
+        DatabaseReference dbref_username = FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("username");
 
-        Map msgMap = new HashMap<>();
-        msgMap.put("text", writemsg.getText().toString());
-        msgMap.put("sender", (FirebaseAuth.getInstance().getUid()));
 
-        dbref.updateChildren(msgMap);
-        writemsg.getText().clear();
+
+        //final String senderUsername;
+        //msgMap.put("sender", "hola");
+
+        dbref_username.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("name :" ,  snapshot.getValue().toString());
+                final String senderUsername = snapshot.getValue().toString();
+                Log.d("name 2 ", senderUsername);
+                Map msgMap = new HashMap<String, String>();
+                msgMap.put("sender", senderUsername);
+                Log.d("buggu", writemsg.getText().toString());
+                msgMap.put("text", writemsg.getText().toString());
+                dbref_newText.updateChildren(msgMap);
+
+                writemsg.getText().clear();
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        Log.d("name: ", dbref_username.get().toString());
+
+
+
+       // dbref_newText.updateChildren(msgMap);
+       // writemsg.getText().clear();
 
     }
 }

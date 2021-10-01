@@ -25,6 +25,7 @@ import java.util.ArrayList;
 public class chatactivity extends AppCompatActivity {
     private RecyclerView contactRV;
     private ArrayList<userObj> contactArraylist;
+    private ArrayList<String> uidList;
 
     private myAdapter adapter;
     FirebaseUser loggedInUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -32,7 +33,7 @@ public class chatactivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatactivity);
-
+        uidList = new ArrayList<>();
         contactRV = (RecyclerView) findViewById(R.id.contactListrv);
         contactArraylist = new ArrayList<>();
 
@@ -48,8 +49,11 @@ public class chatactivity extends AppCompatActivity {
 
 
     }
+
+
     private void chk_isUser(userObj mycontact) {
         Log.d("snap chk_isUser: ", "start checking");
+
         DatabaseReference mUserDB = FirebaseDatabase.getInstance().getReference().child("user");
         if(!mycontact.getPhone().contains("+88")) {
             mycontact.setPhone("+88" + mycontact.getPhone());
@@ -60,6 +64,7 @@ public class chatactivity extends AppCompatActivity {
         if(mycontact.getPhone().contains(" ")) {
             mycontact.setPhone(mycontact.getPhone().replace(" ", ""));
         }
+
         Query query = mUserDB.orderByChild("phone").equalTo(mycontact.getPhone());
 
 
@@ -68,28 +73,34 @@ public class chatactivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 for(DataSnapshot childSnap : snapshot.getChildren()) {
-                    Log.d("snapshots ", childSnap.child("phone").getValue().toString() + " -> local : " + mycontact.getPhone());
+                    Log.d("snapshots ", childSnap.child("phone").getValue().toString() + "(" + childSnap.getKey() + ")" + "(" + childSnap.child("username").getValue().toString() + ")" + " -> local : " + mycontact.getPhone());
 
                     Log.d("snapshots: ", String.valueOf(snapshot.exists()));
 
                     Log.d("snap if me: ", childSnap.child("phone").getValue().toString() + " and me : " + loggedInUser.getPhoneNumber());
+
                     mycontact.setUid(childSnap.getKey());
                     Log.d("uid", childSnap.getKey());
+
                     if(childSnap.child("phone").getValue().toString().equals(loggedInUser.getPhoneNumber())) {
                         mycontact.setMe(true);
                     }
 
 
                 }
+
                 if(snapshot.exists()) {
 
                     Log.d("snapshots chk_isUser", "true");
 
                     mycontact.setUser(true);
+
                     Log.d("uid ", snapshot.getKey());
                     //mycontact.setUid(snapshot.getKey());
                     //Log.d("snap chk if me", snapshot.child("phone").getValue().toString() + " and me : " );//+ loggedInUser.getPhoneNumber());
-                    if(!mycontact.isMe()) {
+                    if(!mycontact.isMe() && !uidList.contains(mycontact.getUid())) {
+                        uidList.add(mycontact.getUid());
+                        Log.d("dup", String.valueOf(contactArraylist.contains(mycontact.getPhone())));
                         contactArraylist.add(mycontact);
                         adapter.notifyDataSetChanged();
                     }

@@ -153,7 +153,7 @@ public class loginactivity extends AppCompatActivity {
                                 if(!snapshot.exists()) {
                                     Map<String, Object> userMap = new HashMap<>();
                                     userMap.put("phone", user.getPhoneNumber());
-                                    userMap.put("username", user.getUid());
+                                    userMap.put("username", user.getPhoneNumber());
                                     mUserDB.updateChildren(userMap);
                                 }
                             }
