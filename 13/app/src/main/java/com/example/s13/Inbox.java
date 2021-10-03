@@ -44,7 +44,7 @@ public class Inbox extends AppCompatActivity {
         sendbtn = (Button) findViewById(R.id.send);
         chatID = getIntent().getExtras().getString("chatID");
 
-        Log.d("msg : ", chatID);
+        Log.d("hell", "chat id is : (uid1+uid2)  -> " + chatID);
 
         inbox_rv = (RecyclerView) findViewById(R.id.inbox_rv);
         message_list = new ArrayList<>();
@@ -116,41 +116,47 @@ public class Inbox extends AppCompatActivity {
 
     private void sendmsg() {
         DatabaseReference dbref_newText = FirebaseDatabase.getInstance().getReference().child("chat").child(chatID).push();
+        Log.d("hell", chatID);
         DatabaseReference dbref_username = FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("username");
 
+        Map msgMap = new HashMap<String, String>();
+        msgMap.put("sender", FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        msgMap.put("text", writemsg.getText().toString());
+        Log.d("what: ", writemsg.getText().toString());
+        dbref_newText.updateChildren(msgMap);
 
-
+        writemsg.getText().clear();
         //final String senderUsername;
         //msgMap.put("sender", "hola");
 
-        dbref_username.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("name :" ,  snapshot.getValue().toString());
-                final String senderUsername = snapshot.getValue().toString();
-                Log.d("name 2 ", senderUsername);
-                Map msgMap = new HashMap<String, String>();
-                msgMap.put("sender", senderUsername);
-                Log.d("buggu", writemsg.getText().toString());
-                msgMap.put("text", writemsg.getText().toString());
-                dbref_newText.updateChildren(msgMap);
-
-                writemsg.getText().clear();
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+//        dbref_username.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                Log.d("creating child on chat -> msg" ,  snapshot.getValue().toString());
+//                final String senderUsername = snapshot.getValue().toString();
+//                Log.d("name 2 ", senderUsername);
+//                Map msgMap = new HashMap<String, String>();
+//                msgMap.put("sender", senderUsername);
+//                Log.d("buggu", writemsg.getText().toString());
+//                msgMap.put("text", writemsg.getText().toString());
+//                dbref_newText.updateChildren(msgMap);
+//
+//                writemsg.getText().clear();
+//
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
         Log.d("name: ", dbref_username.get().toString());
 
 
 
-       // dbref_newText.updateChildren(msgMap);
-       // writemsg.getText().clear();
+        // dbref_newText.updateChildren(msgMap);
+        // writemsg.getText().clear();
 
     }
 }

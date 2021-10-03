@@ -41,7 +41,7 @@ public class Adapter_activeChats extends RecyclerView.Adapter<Adapter_activeChat
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.chatID.setText(activeChats_list.get(position).getChatID());
+        holder.chatID.setText(activeChats_list.get(position).getReceiverName());
 
 
         holder.parent.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +50,10 @@ public class Adapter_activeChats extends RecyclerView.Adapter<Adapter_activeChat
 
                 Intent inbox_intent = new Intent(view.getContext(), Inbox.class);
                 Bundle bundle = new Bundle();
+
                 bundle.putString("chatID", activeChats_list.get(holder.getAdapterPosition()).getChatID());
+                //need chatid as uid1+uid2;
+
                 inbox_intent.putExtras(bundle);
                 view.getContext().startActivity(inbox_intent);
 

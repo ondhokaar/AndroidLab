@@ -33,7 +33,7 @@ public class Adapter_inbox extends RecyclerView.Adapter<Adapter_inbox.ViewHolder
             Log.d("color", "setting red");
         }
         else {
-           // redcolor = 0;
+            // redcolor = 0;
             //bluecolor = 255;
         }
     }
@@ -59,13 +59,13 @@ public class Adapter_inbox extends RecyclerView.Adapter<Adapter_inbox.ViewHolder
         holder.msg.setText(msg_list.get(position).getMsg());
 
         if(msg_list.get(position).getSenderID() == FirebaseAuth.getInstance().getUid()) {
-            holder.senderID.setTextColor(Color.argb(100, redcolor, 255, 255));
-            holder.msg.setTextColor(Color.argb(100, redcolor, 255, 255));
+            //holder.senderID.setTextColor(Color.argb(100, redcolor, 255, 255));
+            //holder.msg.setTextColor(Color.argb(100, redcolor, 255, 255));
         }
         else {
-            holder.senderID.setTextColor(Color.argb(100, 255, 255, 255));
+            //holder.senderID.setTextColor(Color.argb(100, 255, 255, 255));
 
-            holder.msg.setTextColor(Color.argb(100, 255, 255, 255));
+            //holder.msg.setTextColor(Color.argb(100, 255, 255, 255));
         }
 //        holder.senderID.setText("sender: ");
 //        holder.msg.setText("msg msg msg onek msg");

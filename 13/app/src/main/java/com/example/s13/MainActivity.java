@@ -1,5 +1,6 @@
 package com.example.s13;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
@@ -10,8 +11,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
         loginbtn = (Button) findViewById(R.id.loginbtn);
         test_login = (Switch) findViewById(R.id.test_login);
         chatbtn = (Button) findViewById(R.id.chat);
+
+        //checkLoginStatus();
+        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+            Toast.makeText(this, "already logged in ", Toast.LENGTH_SHORT).show();
+            test_login.setChecked(true);
+        }
         //intents
         //chat intent inside onclick of chat button
         Intent intent_login = new Intent(this, loginactivity.class);
@@ -105,7 +114,23 @@ public class MainActivity extends AppCompatActivity {
         test_login.setChecked(loggedIn);
     }
 
-
+    private void checkLoginStatus() {
+        FirebaseAuth.AuthStateListener authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth auth) {
+                FirebaseUser firebaseUser = auth.getCurrentUser();
+                if (firebaseUser != null) {
+                    //Do what you need to do
+                    test_login.setChecked(true);
+                    Toast.makeText(getApplicationContext(), "already logged in ", Toast.LENGTH_SHORT).show();
+                }
+                if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    test_login.setChecked(true);
+                    Toast.makeText(getApplicationContext(), "already logged in ", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+    }
 
     private void getPermissions() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

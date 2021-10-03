@@ -73,10 +73,14 @@ public class ActiveInboxes extends AppCompatActivity {
                 if(snapshot.exists()) {
                     for(DataSnapshot childSnaps : snapshot.getChildren()) {
 
-                        chatObj mChat = new chatObj(childSnaps.getValue().toString());
+                        chatObj mChat = new chatObj(childSnaps.getKey().toString(), childSnaps.getValue().toString());
                         activeChats_list.add(mChat);
                         activeChats_adapter.notifyDataSetChanged();
                     }
+                }
+                else {
+                    activeChats_list.add(new chatObj("no active chat :-(", "illegal"));
+                    activeChats_adapter.notifyDataSetChanged();
                 }
             }
 

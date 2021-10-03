@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,6 +45,27 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder>{
         return holder;
     }
 
+    private String generateNewChatThreadID(String uid1, String uid2) {
+        if(uid1.compareTo(uid2) == -1) // uid1 < uid2
+            return uid1+uid2;
+        return uid2+uid1;
+    }
+    String tag = "new chat issue";
+    private void createNewChat(int position, String uid1, String uid2) {
+
+        Log.d(tag, "createnewChat() starting, bhruuuuuuuum bhuuuum bhuuuuuuu.....");
+
+        String key = generateNewChatThreadID(uid1, uid2);
+
+        FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("chat").child(key).setValue(contactList.get(position).getName());  //uid1+uid2 : otherContactName
+        FirebaseDatabase.getInstance().getReference().child("user").child(uid2).child("chat").child(key).setValue(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        //issue : race
+
+        Log.d(tag, "creating chat on other user -> ::" + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() + " : displayName" + FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+
+
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.name.setText(contactList.get(position).getName());
@@ -57,55 +79,57 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder>{
 
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("chat");
                 Query query = ref.equalTo(holder.name.getText().toString());
-
-                query.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        Log.d("dup found? in your list -> ",String.valueOf(snapshot.exists()));
-                        if(snapshot.exists()){
-                            for (DataSnapshot chats : snapshot.getChildren()) {
-                                Log.d("dup printing snaps: ", chats.getValue().toString() + " : " + holder.name.getText().toString());
-                                if (chats.getValue().toString().equals(holder.name.getText().toString())) {
-
-                                    Intent inbox_intent = new Intent(view.getContext(), Inbox.class);
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("chatID", chats.getKey());
-                                    inbox_intent.putExtras(bundle);
-                                    view.getContext().startActivity(inbox_intent);
-
-                                    break;
-
-                                }
-                            }
-
-                        }
-                        else {
-                            Log.d("dup ", "no dup found, so creating new chat");
-                            String key = FirebaseDatabase.getInstance().getReference().push().getKey();
-                            FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("chat").child(key).setValue(contactList.get(position).getName());
-                            DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("username");
-                            // FirebaseDatabase.getInstance().getReference().child("user").child(contactList.get(position).getUid()).child("chat").child(key).setValue("test");
-
-                            dbref.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    Log.d("active chats: ", snapshot.getValue().toString());
-                                    FirebaseDatabase.getInstance().getReference().child("user").child(contactList.get(position).getUid()).child("chat").child(key).setValue(snapshot.getValue().toString());
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                createNewChat(position, FirebaseAuth.getInstance().getUid(), contactList.get(position).getUid());
+//                query.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        Log.d("dup found? in your list -> ",String.valueOf(snapshot.exists()));
+//                        if(snapshot.exists()){
+//                            for (DataSnapshot chats : snapshot.getChildren()) {
+//                                Log.d("dup printing snaps: ", chats.getValue().toString() + " : " + holder.name.getText().toString());
+//                                if (chats.getValue().toString().equals(holder.name.getText().toString())) {
+//
+//                                    Intent inbox_intent = new Intent(view.getContext(), Inbox.class);
+//                                    Bundle bundle = new Bundle();
+//                                    bundle.putString("chatID", chats.getKey());
+//                                    inbox_intent.putExtras(bundle);
+//                                    view.getContext().startActivity(inbox_intent);
+//
+//                                    break;
+//
+//                                }
+//                            }
+//
+//                        }
+//                        else {
+//                            createNewChat(position, FirebaseAuth.getInstance().getUid(), contactList.get(position).getUid());
+//                            //new chat creating
+////                            Log.d("dup ", "no dup found, so creating new chat");
+////                            String key = FirebaseDatabase.getInstance().getReference().push().getKey();
+////                            FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("chat").child(key).setValue(contactList.get(position).getName());
+////                            DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("username");
+////                            // FirebaseDatabase.getInstance().getReference().child("user").child(contactList.get(position).getUid()).child("chat").child(key).setValue("test");
+////
+////                            dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+////                                @Override
+////                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+////                                    Log.d("active chats: ", snapshot.getValue().toString());
+////                                    FirebaseDatabase.getInstance().getReference().child("user").child(contactList.get(position).getUid()).child("chat").child(key).setValue(snapshot.getValue().toString());
+////                                }
+////
+////                                @Override
+////                                public void onCancelled(@NonNull DatabaseError error) {
+////
+////                                }
+////                            });
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
 
 
 
