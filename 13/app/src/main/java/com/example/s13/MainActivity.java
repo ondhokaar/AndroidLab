@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private static Button loginbtn, chatbtn, outbtn;
 
 
-    private static Switch test_login;
+    private boolean isLoggedIn;
 
 
 
@@ -34,13 +34,14 @@ public class MainActivity extends AppCompatActivity {
         //findview
         outbtn = (Button) findViewById(R.id.signout);
         loginbtn = (Button) findViewById(R.id.loginbtn);
-        test_login = (Switch) findViewById(R.id.test_login);
+        //test_login = (Switch) findViewById(R.id.test_login);
         chatbtn = (Button) findViewById(R.id.chat);
 
         //checkLoginStatus();
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
             Toast.makeText(this, "already logged in ", Toast.LENGTH_SHORT).show();
-            test_login.setChecked(true);
+            //test_login.setChecked(true);
+            isLoggedIn = true;
         }
         //intents
         //chat intent inside onclick of chat button
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getPermissions() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[] {Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CONTACTS}, 1);
+            requestPermissions(new String[] {Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CONTACTS, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 1);
         }
 
     }

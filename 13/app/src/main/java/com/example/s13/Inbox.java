@@ -3,16 +3,33 @@ package com.example.s13;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +43,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Inbox extends AppCompatActivity {
+    private static final long LOCATION_REFRESH_TIME = 1000;
+    private static final float LOCATION_REFRESH_DISTANCE = 1;
     private RecyclerView inbox_rv;
     private ArrayList<messageObj> message_list;
     private Adapter_inbox message_adapter;
@@ -34,12 +53,16 @@ public class Inbox extends AppCompatActivity {
     private Button sendbtn;
     private EditText writemsg;
 
+    FusedLocationProviderClient fusedLocClient;
+    com.google.android.gms.location.LocationRequest locationRequest;// = new com.google.android.gms.location.LocationRequest();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inbox);
 
+        locationRequest = new com.google.android.gms.location.LocationRequest();
+        fusedLocClient = LocationServices.getFusedLocationProviderClient(this);
         writemsg = (EditText) findViewById(R.id.writemsg);
         sendbtn = (Button) findViewById(R.id.send);
         chatID = getIntent().getExtras().getString("chatID");
@@ -63,10 +86,59 @@ public class Inbox extends AppCompatActivity {
                 sendmsg();
             }
         });
+        getPermission();
+        getLastLocation();
+
 
         getAllMsg();
 
     }
+
+
+
+    void getPermission() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void getLastLocation() {
+        fusedLocClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                if(task.getResult() == null) {
+                    requestNewLoc();
+                }
+                else {
+                    Log.d("location", "location found: " + task.getResult().getAltitude() + ", " + task.getResult().getLongitude());
+
+                }
+            }
+        });
+    }
+    @SuppressLint("MissingPermission")
+    private void requestNewLoc() {
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(5);
+        locationRequest.setFastestInterval(0);
+        locationRequest.setNumUpdates(1);
+
+
+
+        fusedLocClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocClient.requestLocationUpdates(locationRequest, mLocCallBack, Looper.myLooper());
+
+
+
+    }
+    private LocationCallback mLocCallBack = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locRes) {
+            Location lastLoc = locRes.getLastLocation();
+            Log.d("location", "LocationCallback() inside inbox - " + lastLoc.getAltitude());
+        }
+    };
     private void getAllMsg() {
         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("chat").child(chatID);
         dbref.addChildEventListener(new ChildEventListener() {
@@ -115,12 +187,18 @@ public class Inbox extends AppCompatActivity {
     }
 
     private void sendmsg() {
+        requestNewLoc();
         DatabaseReference dbref_newText = FirebaseDatabase.getInstance().getReference().child("chat").child(chatID).push();
         Log.d("hell", chatID);
         DatabaseReference dbref_username = FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("username");
 
         Map msgMap = new HashMap<String, String>();
         msgMap.put("sender", FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+
+
+
+        //writemsg.setText(mLocationListener);
+
         msgMap.put("text", writemsg.getText().toString());
         Log.d("what: ", writemsg.getText().toString());
         dbref_newText.updateChildren(msgMap);
