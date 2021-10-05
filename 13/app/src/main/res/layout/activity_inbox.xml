@@ -2,47 +2,97 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/inbox"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Inbox"
-    android:id="@+id/inbox">
+    tools:context=".Inbox">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/inbox_rv"
-        android:layout_width="361dp"
-        android:layout_height="526dp"
+        android:layout_width="351dp"
+        android:layout_height="527dp"
         android:layout_above="@+id/writemsg"
+        android:layout_marginBottom="8dp"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/writemsg"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/writemsg"
-        android:layout_width="309dp"
-        android:layout_height="46dp"
+        android:layout_width="246dp"
+        android:layout_height="47dp"
         android:layout_below="@+id/inbox_rv"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="64dp"
+        android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+        android:backgroundTint="#4826734B"
         android:hint="write msg"
+        android:paddingLeft="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inbox_rv"
-        app:layout_constraintVertical_bias="0"
         tools:visibility="visible" />
 
     <Button
         android:id="@+id/send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="64dp"
+        android:backgroundTint="#27324E"
         android:text="send"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/inbox_rcvertitle"
+        android:layout_width="304dp"
+        android:layout_height="69dp"
+        android:fontFamily="@font/mouse_memoirs"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:text="+8801756060071"
+        android:textColor="#4181C6"
+        android:textSize="23dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/sendmsglottie"
+        android:layout_width="235dp"
+        android:layout_height="69dp"
+        android:scaleType="fitEnd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/writemsg"
-        app:layout_constraintTop_toBottomOf="@+id/inbox_rv"
-        app:layout_constraintVertical_bias="0.955" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/manakin2" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="140dp"
+        android:layout_height="69dp"
+        android:scaleType="fitStart"
+        app:layout_constraintEnd_toEndOf="@+id/sendmsglottie"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/layer" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimationView2"
+        android:layout_width="140dp"
+        android:layout_height="69dp"
+        android:scaleType="fitStart"
+        app:layout_constraintEnd_toEndOf="@+id/sendmsglottie"
+        app:layout_constraintHorizontal_bias="0.35"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/layer" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

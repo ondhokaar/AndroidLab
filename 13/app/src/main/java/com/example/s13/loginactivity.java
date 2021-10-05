@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.airbnb.lottie.Lottie;
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -50,21 +52,32 @@ public class loginactivity extends AppCompatActivity {
 
     private Button signoutbtn;
     LinearLayout loginCredentials;
+    LottieAnimationView lottie_liquid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginactivity);
+        intent_mainactivity = new Intent(getApplicationContext(), MainActivity.class);
+        lottie_liquid = (LottieAnimationView) findViewById(R.id.lottie_liquid);
+        if(FirebaseAuth.getInstance().getCurrentUser() != null && getIntent().getExtras() == null) {
+            finish();
+            startActivity(intent_mainactivity);
+        }
         signoutbtn = (Button) findViewById(R.id.signout);
         loginCredentials = (LinearLayout) findViewById(R.id.loginCredentials);
         //firebase init
         //FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
         //intents
-        intent_mainactivity = new Intent(getApplicationContext(), MainActivity.class);
+
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
             signoutbtn.setVisibility(View.VISIBLE);
             loginCredentials.setVisibility(View.GONE);
+
+
+
+
         }
         else {
             signoutbtn.setVisibility(View.GONE);
@@ -124,8 +137,12 @@ public class loginactivity extends AppCompatActivity {
                 Intent login_intent = getIntent();
 
                 loginactivity.this.finish();
+                Bundle bundle = new Bundle();
+                bundle.putString("from", "signoutbtn");
+                login_intent.putExtras(bundle);
 
                 startActivity(login_intent);
+
             }
         });
 

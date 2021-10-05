@@ -16,7 +16,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.s13.adapters.Adapter_inbox;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -32,6 +34,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +50,8 @@ public class Inbox extends AppCompatActivity {
 
     private Button sendbtn;
     private EditText writemsg;
+    private TextView receiver;
+    LottieAnimationView lottie_sendmsg;
 
     FusedLocationProviderClient fusedLocClient;
     com.google.android.gms.location.LocationRequest locationRequest;// = new com.google.android.gms.location.LocationRequest();
@@ -54,13 +60,14 @@ public class Inbox extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inbox);
-
+        lottie_sendmsg = (LottieAnimationView) findViewById(R.id.sendmsglottie);
         locationRequest = new com.google.android.gms.location.LocationRequest();
         fusedLocClient = LocationServices.getFusedLocationProviderClient(this);
         writemsg = (EditText) findViewById(R.id.writemsg);
         sendbtn = (Button) findViewById(R.id.send);
         chatID = getIntent().getExtras().getString("chatID");
-
+        receiver = (TextView) findViewById(R.id.inbox_rcvertitle);
+        receiver.setText(getIntent().getExtras().getString("receiver"));
         Log.d("hell", "chat id is : (uid1+uid2)  -> " + chatID);
 
         inbox_rv = (RecyclerView) findViewById(R.id.inbox_rv);
@@ -181,6 +188,7 @@ public class Inbox extends AppCompatActivity {
     }
 
     private void sendmsg() {
+        lottie_sendmsg.resumeAnimation();
         requestNewLoc();
         DatabaseReference dbref_newText = FirebaseDatabase.getInstance().getReference().child("chat").child(chatID).push();
         Log.d("hell", chatID);

@@ -9,13 +9,20 @@
         android:layout_width="match_parent"
         android:layout_height="31dp"
 
-        android:text="sender : " />
+        android:fontFamily="@font/londrina_solid"
+        android:gravity="bottom|left"
+        android:paddingLeft="10dp"
+        android:text="sender : "
+        android:textAlignment="gravity"
+        android:textColor="#26734B" />
 
     <TextView
         android:id="@+id/msg"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/senderID"
+        android:fontFamily="@font/londrina_solid"
+        android:paddingLeft="10dp"
         android:text="msg msg onek msg" />
 
 </RelativeLayout>

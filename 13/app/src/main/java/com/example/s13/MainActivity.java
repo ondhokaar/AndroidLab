@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -22,21 +23,30 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static Button loginbtn, chatbtn, outbtn;
-
+    private static Button loginbtn, outbtn;
+    private static LottieAnimationView chatLottie;
 
     private static boolean isLoggedIn;
 
 
     private LottieAnimationView jellyfish;
-    private LottieAnimationView circulo_dog;
-
+    private LottieAnimationView circulo_dog, emergencyContacts;
+    private TextView welcomeText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         jellyfish = (LottieAnimationView) findViewById(R.id.jellyfish);
+        emergencyContacts = (LottieAnimationView) findViewById(R.id.emergency_contact);
+        welcomeText = (TextView) findViewById(R.id.welcometext);
+        emergencyContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //open emergency contact list activity
+                startActivity(new Intent(getApplicationContext(), EmergencyActivity.class));
+            }
+        });
 
         jellyfish.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
@@ -65,17 +75,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //open login page
                 //finish();
-                startActivity(new Intent(getApplicationContext(), loginactivity.class));
+                Bundle bundle = new Bundle();
+                bundle.putString("father", "abba");
+                startActivity(new Intent(getApplicationContext(), loginactivity.class).putExtras(bundle));
 
             }
         });
 
         //findview
         //outbtn = (Button) findViewById(R.id.signout);
-        loginbtn = (Button) findViewById(R.id.loginbtn);
 
-        chatbtn = (Button) findViewById(R.id.chat);
 
+        chatLottie = (LottieAnimationView) findViewById(R.id.chat);
         //checkLoginStatus();
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
             Toast.makeText(this, "already logged in ", Toast.LENGTH_SHORT).show();
@@ -91,12 +102,12 @@ public class MainActivity extends AppCompatActivity {
         //setup ui
 
         if(isLoggedIn) {
-            loginbtn.setVisibility(View.GONE);
+
 
         }
         else {
            // outbtn.setVisibility(View.GONE);
-            chatbtn.setVisibility(View.GONE);
+            chatLottie.setVisibility(View.GONE);
         }
 
 
@@ -109,30 +120,40 @@ public class MainActivity extends AppCompatActivity {
 //                updateUI();
 //            }
 //        });
-        chatbtn.setOnClickListener(new View.OnClickListener() {
+        chatLottie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //startActivity(new Intent(getApplicationContext(), chatactivity.class));
                 startActivity(new Intent(getApplicationContext(), ActiveInboxes.class));
             }
         });
-        loginbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(intent_login);
-            }
-        });
+
+
 
 
 
         getPermissions();
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+            welcomeText.setText("Hi, \n" + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+            chatLottie.setVisibility(View.VISIBLE);
+        }
+        else {
+            welcomeText.setText("Sign In for more!!");
+            chatLottie.setVisibility(View.GONE);
+        }
+    }
+
     public static void setLoginbtn(int visibility) {
-        loginbtn.setVisibility(visibility);
+        //loginbtn.setVisibility(visibility);
     }
     public static void setChatbtn(int visibility) {
-        chatbtn.setVisibility(visibility);
+        chatLottie.setVisibility(visibility);
     }
     public static void setLoginStatus(boolean loggedIn) {
         isLoggedIn = loggedIn;
@@ -149,13 +170,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI() {
         if(isLoggedIn) {
-            loginbtn.setVisibility(View.GONE);
-            chatbtn.setVisibility(View.VISIBLE);
+           // loginbtn.setVisibility(View.GONE);
+            chatLottie.setVisibility(View.VISIBLE);
            // outbtn.setVisibility(View.VISIBLE);
         }
         else {
-            chatbtn.setVisibility(View.GONE);
-            loginbtn.setVisibility(View.VISIBLE);
+            chatLottie.setVisibility(View.GONE);
+           // loginbtn.setVisibility(View.VISIBLE);
             //outbtn.setVisibility(View.GONE);
         }
     }

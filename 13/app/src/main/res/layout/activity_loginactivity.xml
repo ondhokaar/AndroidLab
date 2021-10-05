@@ -5,7 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".loginactivity">
-
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_liquid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:lottie_autoPlay="false"
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/lottie_liquid_down"
+        />
     <com.airbnb.lottie.LottieAnimationView
         android:layout_width="411dp"
         android:layout_height="381dp"
@@ -68,4 +75,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

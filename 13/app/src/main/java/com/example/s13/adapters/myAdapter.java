@@ -3,6 +3,7 @@ package com.example.s13.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.s13.Inbox;
+import com.example.s13.MainActivity;
 import com.example.s13.R;
 import com.example.s13.userObj;
 import com.google.firebase.auth.FirebaseAuth;
@@ -87,8 +89,16 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder>{
 
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("chat");
                 Query query = ref.equalTo(holder.name.getText().toString());
-                createNewChat(position, FirebaseAuth.getInstance().getUid(), contactList.get(position).getUid());
-                openChat(position );
+                if(contactList.get(position).getUser() && FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    createNewChat(position, FirebaseAuth.getInstance().getUid(), contactList.get(position).getUid());
+                    openChat(position );
+                }
+                else {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:" + contactList.get(position).getPhone()));
+                    context.startActivity(intent);
+                }
+
 //                query.addValueEventListener(new ValueEventListener() {
 //                    @Override
 //                    public void onDataChange(@NonNull DataSnapshot snapshot) {

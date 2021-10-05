@@ -52,7 +52,7 @@ public class Adapter_activeChats extends RecyclerView.Adapter<Adapter_activeChat
                 Bundle bundle = new Bundle();
 
                 bundle.putString("chatID", activeChats_list.get(holder.getAdapterPosition()).getChatID());
-                //need chatid as uid1+uid2;
+                bundle.putString("receiver", activeChats_list.get(holder.getAdapterPosition()).getReceiverName());
 
                 inbox_intent.putExtras(bundle);
                 view.getContext().startActivity(inbox_intent);
