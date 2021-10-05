@@ -166,7 +166,7 @@ public class loginactivity extends AppCompatActivity {
 
                         MainActivity.setLoginbtn(View.GONE);
                         MainActivity.setChatbtn(View.VISIBLE);
-                        MainActivity.setToggle(true);
+                        MainActivity.setLoginStatus(true);
                         finish();
                         return;
                     }

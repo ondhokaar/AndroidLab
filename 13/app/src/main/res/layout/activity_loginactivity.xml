@@ -6,30 +6,50 @@
     android:layout_height="match_parent"
     tools:context=".loginactivity">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="411dp"
+        android:layout_height="381dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/lottie_circulo_dog" />
+
     <LinearLayout
-        android:layout_width="267dp"
-        android:layout_height="472dp"
+        android:layout_width="255dp"
+        android:layout_height="150dp"
+        android:dividerPadding="10dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.555">
 
         <EditText
+            android:paddingLeft="10dp"
             android:id="@+id/phone"
             android:layout_width="match_parent"
-            android:layout_height="102dp"
+            android:layout_height="37dp"
+            android:background="@drawable/textfield_login"
             android:ems="10"
             android:hint="phone"
             android:inputType="phone" />
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
         <EditText
+            android:paddingLeft="10dp"
             android:id="@+id/code"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="37dp"
+            android:background="@drawable/textfield_login"
             android:ems="10"
-            android:inputType="number"
-            android:hint="code" />
+            android:hint="code"
+            android:inputType="number" />
 
         <Button
             android:id="@+id/sendcode"

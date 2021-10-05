@@ -3,26 +3,21 @@ package com.example.s13;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
+import com.example.s13.adapters.Adapter_inbox;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -36,7 +31,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -157,7 +151,7 @@ public class Inbox extends AppCompatActivity {
 
                     messageObj newmsg = new messageObj(text, snapshot.getKey(), sender);
                     message_list.add(newmsg);
-                    message_adapter.adjustColor(sender, FirebaseAuth.getInstance().getUid().toString());
+                    //message_adapter.adjustColor(sender, FirebaseAuth.getInstance().getUid().toString());
                     inbox_rv.getLayoutManager().scrollToPosition(message_list.size() - 1);
                     message_adapter.notifyDataSetChanged();
 

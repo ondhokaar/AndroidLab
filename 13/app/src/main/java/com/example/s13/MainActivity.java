@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private static Button loginbtn, chatbtn, outbtn;
 
 
-    private boolean isLoggedIn;
+    private static boolean isLoggedIn;
 
 
 
@@ -34,13 +35,13 @@ public class MainActivity extends AppCompatActivity {
         //findview
         outbtn = (Button) findViewById(R.id.signout);
         loginbtn = (Button) findViewById(R.id.loginbtn);
-        //test_login = (Switch) findViewById(R.id.test_login);
+
         chatbtn = (Button) findViewById(R.id.chat);
 
         //checkLoginStatus();
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
             Toast.makeText(this, "already logged in ", Toast.LENGTH_SHORT).show();
-            //test_login.setChecked(true);
+
             isLoggedIn = true;
         }
         //intents
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         //setup ui
 
-        if(test_login.isChecked()) {
+        if(isLoggedIn) {
             loginbtn.setVisibility(View.GONE);
 
         }
@@ -60,13 +61,14 @@ public class MainActivity extends AppCompatActivity {
             chatbtn.setVisibility(View.GONE);
         }
 
-        test_login.setVisibility(View.GONE);
+
         //setonclick
         outbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-                test_login.setChecked(false);
+                isLoggedIn = false;
+                updateUI();
             }
         });
         chatbtn.setOnClickListener(new View.OnClickListener() {
@@ -85,23 +87,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        test_login.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(test_login.isChecked()) {
-                    loginbtn.setVisibility(View.GONE);
-                    chatbtn.setVisibility(View.VISIBLE);
-                    outbtn.setVisibility(View.VISIBLE);
-                }
-                else {
-                    loginbtn.setVisibility(View.VISIBLE);
-                    chatbtn.setVisibility(View.GONE);
-                    outbtn.setVisibility(View.GONE);
-                }
-
-            }
-        });
-
         getPermissions();
 
     }
@@ -111,27 +96,11 @@ public class MainActivity extends AppCompatActivity {
     public static void setChatbtn(int visibility) {
         chatbtn.setVisibility(visibility);
     }
-    public static void setToggle(boolean loggedIn) {
-        test_login.setChecked(loggedIn);
+    public static void setLoginStatus(boolean loggedIn) {
+        isLoggedIn = loggedIn;
     }
 
-    private void checkLoginStatus() {
-        FirebaseAuth.AuthStateListener authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth auth) {
-                FirebaseUser firebaseUser = auth.getCurrentUser();
-                if (firebaseUser != null) {
-                    //Do what you need to do
-                    test_login.setChecked(true);
-                    Toast.makeText(getApplicationContext(), "already logged in ", Toast.LENGTH_SHORT).show();
-                }
-                if(FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    test_login.setChecked(true);
-                    Toast.makeText(getApplicationContext(), "already logged in ", Toast.LENGTH_SHORT).show();
-                }
-            }
-        };
-    }
+
 
     private void getPermissions() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -140,5 +109,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void updateUI() {
+        if(isLoggedIn) {
+            loginbtn.setVisibility(View.GONE);
+            chatbtn.setVisibility(View.VISIBLE);
+            outbtn.setVisibility(View.VISIBLE);
+        }
+        else {
+            chatbtn.setVisibility(View.GONE);
+            loginbtn.setVisibility(View.VISIBLE);
+            outbtn.setVisibility(View.GONE);
+        }
+    }
 
 }

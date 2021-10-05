@@ -7,6 +7,7 @@
         <entry key="..\:/Study/22/Android/13/app/src/main/res/drawable/circlebutton.xml" value="0.15" />
         <entry key="..\:/Study/22/Android/13/app/src/main/res/drawable/contact_border.xml" value="0.15989583333333332" />
         <entry key="..\:/Study/22/Android/13/app/src/main/res/drawable/send_foreground.xml" value="0.1125" />
+        <entry key="..\:/Study/22/Android/13/app/src/main/res/drawable/textfield_login.xml" value="0.19907407407407407" />
         <entry key="..\:/Study/22/Android/13/app/src/main/res/layout/active_chats_item.xml" value="0.209375" />
         <entry key="..\:/Study/22/Android/13/app/src/main/res/layout/activity_active_inboxes.xml" value="0.209375" />
         <entry key="..\:/Study/22/Android/13/app/src/main/res/layout/activity_all_inbox.xml" value="0.25" />
@@ -16,10 +17,17 @@
         <entry key="..\:/Study/22/Android/13/app/src/main/res/layout/activity_inbox.xml" value="0.5" />
         <entry key="..\:/Study/22/Android/13/app/src/main/res/layout/activity_loginactivity.xml" value="0.33" />
         <entry key="..\:/Study/22/Android/13/app/src/main/res/layout/activity_main.xml" value="0.5" />
+        <entry key="..\:/Study/22/Android/13/app/src/main/res/layout/activity_navigation_drawer.xml" value="0.209375" />
         <entry key="..\:/Study/22/Android/13/app/src/main/res/layout/activity_single_inbox.xml" value="0.18" />
+        <entry key="..\:/Study/22/Android/13/app/src/main/res/layout/app_bar_navigation_drawer.xml" value="0.209375" />
         <entry key="..\:/Study/22/Android/13/app/src/main/res/layout/chatlist.xml" value="0.25" />
         <entry key="..\:/Study/22/Android/13/app/src/main/res/layout/contact_chat.xml" value="0.1" />
+        <entry key="..\:/Study/22/Android/13/app/src/main/res/layout/content_navigation_drawer.xml" value="0.209375" />
+        <entry key="..\:/Study/22/Android/13/app/src/main/res/layout/fragment_gallery.xml" value="0.209375" />
+        <entry key="..\:/Study/22/Android/13/app/src/main/res/layout/fragment_home.xml" value="0.209375" />
+        <entry key="..\:/Study/22/Android/13/app/src/main/res/layout/fragment_slideshow.xml" value="0.209375" />
         <entry key="..\:/Study/22/Android/13/app/src/main/res/layout/inbox_eachmsg.xml" value="0.22" />
+        <entry key="..\:/Study/22/Android/13/app/src/main/res/layout/nav_header_navigation_drawer.xml" value="0.209375" />
         <entry key="..\:/Study/22/Android/13/app/src/main/res/mipmap-anydpi-v26/scaredCat.xml" value="0.15364583333333334" />
         <entry key="..\:/Study/22/Android/13/app/src/main/res/mipmap-anydpi-v26/scaredcat.xml" value="0.21333333333333335" />
         <entry key="..\:/Study/22/Android/13/app/src/main/res/mipmap-anydpi-v26/send_round.xml" value="0.1125" />

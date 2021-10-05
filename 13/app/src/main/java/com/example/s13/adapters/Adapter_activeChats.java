@@ -1,10 +1,9 @@
-package com.example.s13;
+package com.example.s13.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +13,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
+import com.example.s13.Inbox;
+import com.example.s13.R;
+import com.example.s13.chatObj;
 
 import java.util.ArrayList;
 
