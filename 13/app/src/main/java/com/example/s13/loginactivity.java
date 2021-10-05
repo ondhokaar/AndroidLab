@@ -2,6 +2,7 @@ package com.example.s13;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.LinearLayoutCompat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -46,15 +48,28 @@ public class loginactivity extends AppCompatActivity {
 
     private String vid;
 
+    private Button signoutbtn;
+    LinearLayout loginCredentials;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginactivity);
+        signoutbtn = (Button) findViewById(R.id.signout);
+        loginCredentials = (LinearLayout) findViewById(R.id.loginCredentials);
         //firebase init
         //FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
         //intents
         intent_mainactivity = new Intent(getApplicationContext(), MainActivity.class);
+
+        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+            signoutbtn.setVisibility(View.VISIBLE);
+            loginCredentials.setVisibility(View.GONE);
+        }
+        else {
+            signoutbtn.setVisibility(View.GONE);
+            loginCredentials.setVisibility(View.VISIBLE);
+        }
 
         //findviewbyid()
         sendcode = (Button) findViewById(R.id.sendcode);
@@ -99,6 +114,18 @@ public class loginactivity extends AppCompatActivity {
 
                 }
 
+            }
+        });
+
+        signoutbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                Intent login_intent = getIntent();
+
+                loginactivity.this.finish();
+
+                startActivity(login_intent);
             }
         });
 

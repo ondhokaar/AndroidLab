@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -25,15 +28,50 @@ public class MainActivity extends AppCompatActivity {
     private static boolean isLoggedIn;
 
 
+    private LottieAnimationView jellyfish;
+    private LottieAnimationView circulo_dog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        jellyfish = (LottieAnimationView) findViewById(R.id.jellyfish);
 
+        jellyfish.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                jellyfish.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        circulo_dog = (LottieAnimationView) findViewById(R.id.circulo_dog);
+        circulo_dog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //open login page
+                //finish();
+                startActivity(new Intent(getApplicationContext(), loginactivity.class));
+
+            }
+        });
 
         //findview
-        outbtn = (Button) findViewById(R.id.signout);
+        //outbtn = (Button) findViewById(R.id.signout);
         loginbtn = (Button) findViewById(R.id.loginbtn);
 
         chatbtn = (Button) findViewById(R.id.chat);
@@ -57,20 +95,20 @@ public class MainActivity extends AppCompatActivity {
 
         }
         else {
-            outbtn.setVisibility(View.GONE);
+           // outbtn.setVisibility(View.GONE);
             chatbtn.setVisibility(View.GONE);
         }
 
 
         //setonclick
-        outbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                isLoggedIn = false;
-                updateUI();
-            }
-        });
+//        outbtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                FirebaseAuth.getInstance().signOut();
+//                isLoggedIn = false;
+//                updateUI();
+//            }
+//        });
         chatbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,12 +151,12 @@ public class MainActivity extends AppCompatActivity {
         if(isLoggedIn) {
             loginbtn.setVisibility(View.GONE);
             chatbtn.setVisibility(View.VISIBLE);
-            outbtn.setVisibility(View.VISIBLE);
+           // outbtn.setVisibility(View.VISIBLE);
         }
         else {
             chatbtn.setVisibility(View.GONE);
             loginbtn.setVisibility(View.VISIBLE);
-            outbtn.setVisibility(View.GONE);
+            //outbtn.setVisibility(View.GONE);
         }
     }
 
