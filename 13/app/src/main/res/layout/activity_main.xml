@@ -12,12 +12,12 @@
         android:id="@+id/circulo_dog"
         android:layout_width="230dp"
         android:layout_height="230dp"
-        android:layout_marginStart="168dp"
-        android:layout_marginTop="152dp"
+        android:layout_marginStart="180dp"
 
+        android:layout_marginTop="540dp"
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chat"
+        app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/lottie_circulo_dog" />

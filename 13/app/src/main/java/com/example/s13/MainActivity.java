@@ -44,13 +44,14 @@ public class MainActivity extends AppCompatActivity {
     LocationRequest locationRequest;
     private LottieAnimationView jellyfish;
     private LottieAnimationView circulo_dog, emergencyContacts, lottieLocation;
-    private TextView welcomeText;
+    private TextView welcomeText, textView2 ;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        textView2 =findViewById(R.id.textView2);
         //lottieLocation = (LottieAnimationView) findViewById(R.id.instant_location);
         //lottieLocation.setVisibility(View.GONE);
         jellyfish = (LottieAnimationView) findViewById(R.id.jellyfish);
@@ -207,11 +208,13 @@ public class MainActivity extends AppCompatActivity {
             welcomeText.setText("Hi, \n" + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
             chatLottie.setVisibility(View.VISIBLE);
             //lottieLocation.setVisibility(View.VISIBLE);
+            textView2.setVisibility(View.VISIBLE);
         }
         else {
             welcomeText.setText("Sign In for more!!");
             chatLottie.setVisibility(View.GONE);
            // lottieLocation.setVisibility(View.GONE);
+            textView2.setVisibility(View.GONE);
         }
     }
 
