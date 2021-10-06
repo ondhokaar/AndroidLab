@@ -71,6 +71,7 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder>{
         Bundle bundle = new Bundle();
         String chatID_forBundle = generateNewChatThreadID(FirebaseAuth.getInstance().getUid(), contactList.get(position).getUid());
         bundle.putString("chatID", chatID_forBundle);
+        bundle.putString("receiver", contactList.get(position).getName().toString());
 
 
         inbox_intent.putExtras(bundle);

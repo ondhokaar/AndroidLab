@@ -7,10 +7,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.airbnb.lottie.Lottie;
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.s13.adapters.Adapter_activeChats;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +29,7 @@ public class ActiveInboxes extends AppCompatActivity {
     private RecyclerView active_chats_rv;
     private ArrayList<chatObj> activeChats_list;
     private Adapter_activeChats activeChats_adapter;
+    LottieAnimationView lottieNoface;
 
 
     @Override
@@ -33,6 +37,7 @@ public class ActiveInboxes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_active_inboxes);
 
+        lottieNoface = (LottieAnimationView) findViewById(R.id.noface);
         newchat = (Button) findViewById(R.id.newchat);
         active_chats_rv = (RecyclerView) findViewById(R.id.active_chat_rv);
         activeChats_list = new ArrayList<>();
@@ -54,6 +59,20 @@ public class ActiveInboxes extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), chatactivity.class));
             }
         });
+
+        new CountDownTimer(4000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            public void onFinish() {
+                lottieNoface.clearAnimation();
+                lottieNoface.setVisibility(View.GONE);
+                newchat.setVisibility(View.VISIBLE);
+            }
+
+        }.start();
 
         getActiveChats();
         Log.d("prom", "what");
@@ -89,6 +108,7 @@ public class ActiveInboxes extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+
         });
     }
 

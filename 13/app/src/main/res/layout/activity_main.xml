@@ -10,11 +10,14 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/circulo_dog"
-        android:layout_width="215dp"
-        android:layout_height="215dp"
+        android:layout_width="230dp"
+        android:layout_height="230dp"
+        android:layout_marginStart="168dp"
+        android:layout_marginTop="152dp"
+
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chat"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/lottie_circulo_dog" />
@@ -23,11 +26,11 @@
         android:id="@+id/chat"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="276dp"
+        android:layout_marginTop="244dp"
+        android:layout_marginEnd="20dp"
+
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.836"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
@@ -37,10 +40,10 @@
         android:id="@+id/emergency_contact"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="276dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="244dp"
+
         android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.18"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
@@ -60,6 +63,52 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/emergency_contact_label"
+        android:layout_width="103dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginTop="343dp"
+        android:fontFamily="@font/londrina_solid"
+        android:gravity="bottom|center_horizontal"
+        android:paddingStart="1dp"
+        android:paddingTop="1dp"
+        android:paddingRight="1dp"
+        android:paddingBottom="1dp"
+        android:text="Emergeny"
+        android:textAlignment="gravity"
+        android:textAllCaps="true"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="348dp"
+        android:layout_marginEnd="75dp"
+        android:fontFamily="@font/londrina_solid"
+        android:text="Chat"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.airbnb.lottie.LottieAnimationView
+
+        android:id="@+id/frog"
+        android:layout_width="117dp"
+        android:layout_height="91dp"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/lottie_frog" />
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/jellyfish"
         android:layout_width="match_parent"
@@ -69,10 +118,10 @@
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.0"
         app:lottie_autoPlay="true"
         app:lottie_rawRes="@raw/lottie_jellyfish_kaiping" />
 

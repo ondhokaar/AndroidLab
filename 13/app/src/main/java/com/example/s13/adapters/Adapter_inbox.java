@@ -2,6 +2,8 @@ package com.example.s13.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,7 +71,18 @@ public class Adapter_inbox extends RecyclerView.Adapter<Adapter_inbox.ViewHolder
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(holder.msg.getText().toString().contains("address :")) {
+                    //then open map
+                    // Search for restaurants nearby
+                    String para = holder.msg.getText().toString().substring(holder.msg.getText().toString().indexOf(":"));
+                    Uri gmmIntentUri = Uri.parse("geo"+para);
+                    Log.d("bet", "geo:"+para);
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    context.startActivity(mapIntent);
 
+
+                }
             }
         });
 

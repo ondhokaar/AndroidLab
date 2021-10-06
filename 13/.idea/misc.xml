@@ -3,15 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidLab/13/app/src/main/res/drawable/circlebutton.xml" value="0.13796296296296295" />
+        <entry key="..\:/AndroidLab/13/app/src/main/res/drawable/forlottie.xml" value="0.13796296296296295" />
         <entry key="..\:/AndroidLab/13/app/src/main/res/drawable/msg.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidLab/13/app/src/main/res/drawable/textfield_login.xml" value="0.22552083333333334" />
-        <entry key="..\:/AndroidLab/13/app/src/main/res/layout/activity_active_inboxes.xml" value="0.1" />
-        <entry key="..\:/AndroidLab/13/app/src/main/res/layout/activity_chatactivity.xml" value="0.1265625" />
+        <entry key="..\:/AndroidLab/13/app/src/main/res/layout/activity_active_inboxes.xml" value="0.33" />
+        <entry key="..\:/AndroidLab/13/app/src/main/res/layout/activity_chatactivity.xml" value="0.33" />
         <entry key="..\:/AndroidLab/13/app/src/main/res/layout/activity_doctor.xml" value="0.1125" />
         <entry key="..\:/AndroidLab/13/app/src/main/res/layout/activity_emergency.xml" value="0.33" />
         <entry key="..\:/AndroidLab/13/app/src/main/res/layout/activity_inbox.xml" value="0.33" />
         <entry key="..\:/AndroidLab/13/app/src/main/res/layout/activity_loginactivity.xml" value="0.209375" />
-        <entry key="..\:/AndroidLab/13/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/AndroidLab/13/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/AndroidLab/13/app/src/main/res/layout/activity_police.xml" value="0.1265625" />
         <entry key="..\:/AndroidLab/13/app/src/main/res/layout/inbox_eachmsg.xml" value="0.446229913473424" />
         <entry key="..\:/Study/22/Android/13/app/src/main/res/drawable/animated_btn.xml" value="0.2203125" />

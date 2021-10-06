@@ -3,12 +3,16 @@ package com.example.s13;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.google.android.gms.location.LocationRequest;
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -17,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.s13.adapters.Adapter_inbox;
@@ -41,6 +46,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Inbox extends AppCompatActivity {
+    LottieAnimationView sendLocation;
+
+    String address;
     private static final long LOCATION_REFRESH_TIME = 1000;
     private static final float LOCATION_REFRESH_DISTANCE = 1;
     private RecyclerView inbox_rv;
@@ -60,6 +68,7 @@ public class Inbox extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inbox);
+        sendLocation = (LottieAnimationView) findViewById(R.id.sendLocation);
         lottie_sendmsg = (LottieAnimationView) findViewById(R.id.sendmsglottie);
         locationRequest = new com.google.android.gms.location.LocationRequest();
         fusedLocClient = LocationServices.getFusedLocationProviderClient(this);
@@ -84,14 +93,72 @@ public class Inbox extends AppCompatActivity {
         sendbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendmsg();
+                if(!writemsg.getText().toString().isEmpty()) {
+                    sendmsg();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "কিছু লিখেন ভাই", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         getPermission();
-        getLastLocation();
+
 
 
         getAllMsg();
+
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(5000);
+        locationRequest.setFastestInterval(2000);
+
+
+        sendLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("bug", "pressed");
+                //get and share location
+                LocationManager locationManager = null;
+                locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if(ActivityCompat.checkSelfPermission(Inbox.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
+                        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                            LocationServices.getFusedLocationProviderClient(Inbox.this)
+                                    .requestLocationUpdates(locationRequest, new LocationCallback() {
+                                        @Override
+                                        public void onLocationResult(@NonNull LocationResult locationResult) {
+                                            super.onLocationResult(locationResult);
+                                            LocationServices.getFusedLocationProviderClient(Inbox.this)
+                                                    .removeLocationUpdates(this);
+
+                                            if(locationResult != null && locationResult.getLocations().size() > 0) {
+                                                int index = locationResult.getLocations().size() - 1;
+                                                double latitude = locationResult.getLocations().get(index).getLatitude();
+                                                double longitude = locationResult.getLocations().get(index).getLongitude();
+
+                                                address = "address :" + latitude + "," + longitude;
+                                                Log.d("bet", address);
+                                                if(address!=null) {
+                                                    sendLocation.playAnimation();
+                                                    writemsg.getText().clear();
+                                                    writemsg.setText(address);
+                                                    sendmsg();
+                                                }
+                                            }
+                                        }
+                                    }, Looper.getMainLooper());
+                        }
+                        else {
+                            Toast.makeText(Inbox.this, "please turn on gps", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                    else {
+                        Toast.makeText(Inbox.this, "permission denied", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
 
     }
 
@@ -103,43 +170,8 @@ public class Inbox extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("MissingPermission")
-    private void getLastLocation() {
-        fusedLocClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-            @Override
-            public void onComplete(@NonNull Task<Location> task) {
-                if(task.getResult() == null) {
-                    requestNewLoc();
-                }
-                else {
-                    Log.d("location", "location found: " + task.getResult().getAltitude() + ", " + task.getResult().getLongitude());
-
-                }
-            }
-        });
-    }
-    @SuppressLint("MissingPermission")
-    private void requestNewLoc() {
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(5);
-        locationRequest.setFastestInterval(0);
-        locationRequest.setNumUpdates(1);
 
 
-
-        fusedLocClient = LocationServices.getFusedLocationProviderClient(this);
-        fusedLocClient.requestLocationUpdates(locationRequest, mLocCallBack, Looper.myLooper());
-
-
-
-    }
-    private LocationCallback mLocCallBack = new LocationCallback() {
-        @Override
-        public void onLocationResult(LocationResult locRes) {
-            Location lastLoc = locRes.getLastLocation();
-            Log.d("location", "LocationCallback() inside inbox - " + lastLoc.getAltitude());
-        }
-    };
     private void getAllMsg() {
         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("chat").child(chatID);
         dbref.addChildEventListener(new ChildEventListener() {
@@ -187,9 +219,11 @@ public class Inbox extends AppCompatActivity {
         });
     }
 
+
+
     private void sendmsg() {
         lottie_sendmsg.resumeAnimation();
-        requestNewLoc();
+
         DatabaseReference dbref_newText = FirebaseDatabase.getInstance().getReference().child("chat").child(chatID).push();
         Log.d("hell", chatID);
         DatabaseReference dbref_username = FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("username");

@@ -8,9 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.View;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.s13.adapters.myAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,7 +30,7 @@ public class chatactivity extends AppCompatActivity {
     private RecyclerView contactRV;
     private ArrayList<userObj> contactArraylist;
     private ArrayList<String> uidList;
-
+    LottieAnimationView jumpfrog;
     private myAdapter adapter;
     FirebaseUser loggedInUser = FirebaseAuth.getInstance().getCurrentUser();
     @Override
@@ -37,7 +40,7 @@ public class chatactivity extends AppCompatActivity {
         uidList = new ArrayList<>();
         contactRV = (RecyclerView) findViewById(R.id.contactListrv);
         contactArraylist = new ArrayList<>();
-
+        jumpfrog = (LottieAnimationView) findViewById(R.id.jumpfrog);
         adapter = new myAdapter(this);
         adapter.setContactList(contactArraylist);
 
@@ -48,9 +51,45 @@ public class chatactivity extends AppCompatActivity {
         getContacts();
         Log.d("snap init", "getting contacts done");
 
+        new CountDownTimer(3000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            public void onFinish() {
+
+                jumpfrog.setVisibility(View.GONE);
+            }
+
+        }.start();
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        jumpfrog.pauseAnimation();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        jumpfrog.setVisibility(View.VISIBLE);
+        new CountDownTimer(3000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            public void onFinish() {
+                jumpfrog.clearAnimation();
+                jumpfrog.setVisibility(View.GONE);
+            }
+
+        }.start();
+    }
 
     private void chk_isUser(userObj mycontact) {
         Log.d("snap chk_isUser: ", "start checking");

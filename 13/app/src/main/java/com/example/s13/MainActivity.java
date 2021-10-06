@@ -2,13 +2,22 @@ package com.example.s13;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.animation.Animator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
+
+import com.airbnb.lottie.Lottie;
+import com.google.android.gms.location.LocationRequest;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -18,6 +27,10 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -27,16 +40,19 @@ public class MainActivity extends AppCompatActivity {
     private static LottieAnimationView chatLottie;
 
     private static boolean isLoggedIn;
-
-
+    String address;
+    LocationRequest locationRequest;
     private LottieAnimationView jellyfish;
-    private LottieAnimationView circulo_dog, emergencyContacts;
+    private LottieAnimationView circulo_dog, emergencyContacts, lottieLocation;
     private TextView welcomeText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //lottieLocation = (LottieAnimationView) findViewById(R.id.instant_location);
+        //lottieLocation.setVisibility(View.GONE);
         jellyfish = (LottieAnimationView) findViewById(R.id.jellyfish);
         emergencyContacts = (LottieAnimationView) findViewById(R.id.emergency_contact);
         welcomeText = (TextView) findViewById(R.id.welcometext);
@@ -108,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         else {
            // outbtn.setVisibility(View.GONE);
             chatLottie.setVisibility(View.GONE);
+          //  lottieLocation.setVisibility(View.GONE);
         }
 
 
@@ -127,8 +144,55 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), ActiveInboxes.class));
             }
         });
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(5000);
+        locationRequest.setFastestInterval(2000);
 
 
+
+//        lottieLocation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //get and share location
+//                LocationManager locationManager = null;
+//                locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+//                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                    if(ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
+//                        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//                            LocationServices.getFusedLocationProviderClient(MainActivity.this)
+//                                    .requestLocationUpdates(locationRequest, new LocationCallback() {
+//                                        @Override
+//                                        public void onLocationResult(@NonNull LocationResult locationResult) {
+//                                            super.onLocationResult(locationResult);
+//                                            LocationServices.getFusedLocationProviderClient(MainActivity.this)
+//                                                    .removeLocationUpdates(this);
+//
+//                                            if(locationResult != null && locationResult.getLocations().size() > 0) {
+//                                                int index = locationResult.getLocations().size() - 1;
+//                                                double latitude = locationResult.getLocations().get(index).getLatitude();
+//                                                double longitude = locationResult.getLocations().get(index).getLongitude();
+//
+//                                                address = "lat: " + latitude + "\nlongt: " + longitude;
+//                                                Log.d("bet", address);
+//                                                if(address!=null) {
+//                                                    lottieLocation.playAnimation();
+//                                                }
+//                                            }
+//                                        }
+//                                    }, Looper.getMainLooper());
+//                        }
+//                        else {
+//                            Toast.makeText(MainActivity.this, "please turn on gps", Toast.LENGTH_SHORT).show();
+//
+//                        }
+//                    }
+//                    else {
+//                        Toast.makeText(MainActivity.this, "permission denied", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            }
+//        });
 
 
 
@@ -142,10 +206,12 @@ public class MainActivity extends AppCompatActivity {
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
             welcomeText.setText("Hi, \n" + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
             chatLottie.setVisibility(View.VISIBLE);
+            //lottieLocation.setVisibility(View.VISIBLE);
         }
         else {
             welcomeText.setText("Sign In for more!!");
             chatLottie.setVisibility(View.GONE);
+           // lottieLocation.setVisibility(View.GONE);
         }
     }
 

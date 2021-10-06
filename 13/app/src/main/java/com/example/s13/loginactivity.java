@@ -164,16 +164,22 @@ public class loginactivity extends AppCompatActivity {
     }
     private void startVerification() {
         Log.d("verification: ", "started startverification");
-        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mAuth)
-                .setPhoneNumber(phone.getText().toString())
-                .setTimeout(10L, TimeUnit.SECONDS)
-                .setActivity(this)
-                .setCallbacks(callback)
-                .build();
+        if(!phone.getText().toString().isEmpty()) {
+            PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mAuth)
+                    .setPhoneNumber(phone.getText().toString())
+                    .setTimeout(10L, TimeUnit.SECONDS)
+                    .setActivity(this)
+                    .setCallbacks(callback)
+                    .build();
 
 
-        PhoneAuthProvider.verifyPhoneNumber(options);
-        Log.d("verification: ", "code should be sent");
+            PhoneAuthProvider.verifyPhoneNumber(options);
+            Log.d("verification: ", "code should be sent");
+        }
+        else {
+            Toast.makeText(this, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 
@@ -233,8 +239,16 @@ public class loginactivity extends AppCompatActivity {
 
     }
     private void verify_phone_with_code() {
-        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(vid, code.getText().toString());
-        signin_phoneauth(credential);
+        if(!code.getText().toString().isEmpty()) {
+            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(vid, code.getText().toString());
+            signin_phoneauth(credential);
+        }
+        else {
+            Toast.makeText(this, "Invalid Code", Toast.LENGTH_SHORT).show();
+        }
+
+
+
     }
 
     //
